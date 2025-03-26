@@ -14,10 +14,8 @@ var configuration = builder.Configuration;
 builder.Services.AddControllersWithViews();
  
 // Configure Database Connection with environment variable fallback
-var connectionString = configuration.GetConnectionString("DBConnection") 
-                       ?? Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
- 
-builder.Services.AddDbContext<TaskContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<TaskContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
  
 // Register services
 builder.Services.AddScoped<ITasks, TaskRepository>();
@@ -51,7 +49,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
  
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
